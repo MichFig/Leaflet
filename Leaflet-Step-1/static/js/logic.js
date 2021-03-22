@@ -1,44 +1,91 @@
-// We create the map 
+// Create the map & set height in style.css 
 var map = L.map("mapid", {
   center: [
     40.7, -94.5
   ],
-  zoom: 3
+  zoom: 5
 });
 
-// We create the tile layer that will be the background of our map.
-// "Light Mode"
+// Add the light mode tile layer
 var lightmap = L.tileLayer(
   "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
   tileSize: 512,
   maxZoom: 18,
   zoomOffset: -1,
-  id: "mapbox/streets-v8",
+  id: "mapbox/light-v10",
   accessToken: API_KEY
 }
 );
 
-// Then we add our 'lightmap' tile layer to the map.
+// Add lightmap tile layer to the map.
 lightmap.addTo(map);
 
-// Here we make an AJAX call that retrieves our earthquake geoJSON data.
+// // Add the dark tile layer
+// var darkmap = L.tileLayer(
+//   "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+//   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+//   tileSize: 512,
+//   maxZoom: 18,
+//   zoomOffset: -1,
+//   id: "mapbox/dark-v10",
+//   accessToken: API_KEY
+// }
+// );
+
+// Add dark tile layer to the map.
+// darkmap.addTo(map);    
+
+
+// // Add the satellite tile layer
+// var satmap = L.tileLayer(
+//   "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+//   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+//   tileSize: 512,
+//   maxZoom: 18,
+//   zoomOffset: -1,
+//   id: "mapbox/satellite-v9",
+//   accessToken: API_KEY
+// }
+// );
+
+// Add satellite tile layer to the map.
+// satmap.addTo(map);  
+
+// // Add the streets tile layer
+// var streetmap = L.tileLayer(
+//   "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+//   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+//   tileSize: 512,
+//   maxZoom: 18,
+//   zoomOffset: -1,
+//   id: "mapbox/streets-v11",
+//   accessToken: API_KEY
+// }
+// );
+
+// Add streets tile layer to the map.
+// streetmap.addTo(map);      
+
+// // Add the outdoors tile layer
+// var outdoorsmap = L.tileLayer(
+//   "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+//   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+//   tileSize: 512,
+//   maxZoom: 18,
+//   zoomOffset: -1,
+//   id: "mapbox/outdoors-v11",
+//   accessToken: API_KEY
+// }
+// );
+
+// Add outdoor tile layer to the map.
+// outdoorsmap.addTo(map); 
+
+// Retrieves our earthquake geoJSON data.
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson", function (data) {
-  // This function returns the style data for each of the earthquakes we plot on
-  // the map. We pass the magnitude of the earthquake into two separate functions
-  // to calculate the color and radius.
-  function styleInfo(feature) {
-    return {
-      opacity: 1,
-      fillOpacity: 1,
-      fillColor: getColor(feature.geometry.coordinates[2]),
-      color: "#000000",
-      radius: getRadius(feature.properties.mag),
-      stroke: true,
-      weight: 0.5
-    };
-  }
-  // This function determines the color of the marker based on the magnitude of the earthquake.
+
+  // Style marker color 
   function getColor(depth) {
     switch (true) {
       case depth > 139:
@@ -57,23 +104,36 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geo
         return "#FFFFFF";
     }
   }
-  // This function determines the radius of the earthquake marker based on its magnitude.
-  // Earthquakes with a magnitude of 0 were being plotted with the wrong radius.
+  // Style marker fill 
+  function styleInfo(feature) {
+    return {
+      fillColor: getColor(feature.geometry.coordinates[2]),
+      radius: getRadius(feature.properties.mag),
+      weight: .5,
+      opacity: 5,
+      color: "#000000",
+      stroke: true,
+      fillOpacity: 0.7
+
+    };
+  }
+
+  // Style marker magnitude
   function getRadius(magnitude) {
     if (magnitude === 0) {
-      return 1;
+      return 0;
     }
-    return magnitude * 4;
+    return magnitude * 5;
   }
-  // Here we add a GeoJSON layer to the map once the file is loaded.
+  // GeoJSON layer 
   L.geoJson(data, {
-    // We turn each feature into a circleMarker on the map.
+    // Circle conversion
     pointToLayer: function (feature, latlng) {
       return L.circleMarker(latlng);
     },
-    // We set the style for each circleMarker using our styleInfo function.
+    // Style for each circleMarker 
     style: styleInfo,
-    // We create a popup for each marker to display the magnitude and location of the earthquake after the marker has been created and styled
+    // Pop up
     onEachFeature: function (feature, layer) {
       layer.bindPopup(
         "Magnitude: "
@@ -85,16 +145,18 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geo
       );
     }
   }).addTo(map);
-  // Here we create a legend control object.
+
+  // Legend
   var legend = L.control({
     position: "bottomright"
+
   });
   // Then add all the details for the legend
-  legend.onAdd = function () {
+  legend.onAdd = function (map) {
     var div = L.DomUtil.create("div", "info legend");
-    var grades = [ -0.05, 0.03,  2.8, 6.2, 40, 75, 139];
+    var grades = [-0.05, 0.03, 2.8, 6.2, 40, 75, 139];
     var colors = [
-      
+
       "#C80000",
       "#FF9100",
       "#7AFF93",
@@ -103,13 +165,17 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geo
       "#BFCCFF",
       "#FFFFFF"
     ];
-    // Looping through our intervals to generate a label with a colored square for each interval.
+
+    
+    // Looping through intervals to generate a label with a colored square for each interval.
     for (var i = 0; i < grades.length; i++) {
-      div.innerHTML += "<i style='background: " + colors[i] + "'></i> "
-        + grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
-    }
-    return div;
-  };
-  // Finally, we our legend to the map.
-  legend.addTo(map);
+      div.innerHTML +=
+          '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+  }
+
+  return div;
+};
+
+legend.addTo(map);
 });

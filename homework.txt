@@ -1,3 +1,9 @@
+streets-v9
+satellite-streets-v9
+light-v9
+dark-v9
+outdoors-v9
+
 // We create the tile layer that will be the background of our map.
 
 // Light Mode"
@@ -148,4 +154,6 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
 
 
 // mapbox/streets-v11
+
+https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson
 
