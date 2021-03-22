@@ -24,7 +24,7 @@ font-family: 'Open Sans', sans-serif;
 
 .legend {
   line-height: 18px;
-  color: #555;
+  color: #000000
   
 }
 .legend i {
@@ -32,8 +32,9 @@ font-family: 'Open Sans', sans-serif;
   height: 18px;
   float: left;
   margin-right: 8px;
-  opacity: 0.7;
-
+  opacity: 10;
+  
+  
 }
 
 

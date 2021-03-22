@@ -155,6 +155,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geo
   legend.onAdd = function (map) {
     var div = L.DomUtil.create("div", "info legend");
     var grades = [-0.05, 0.03, 2.8, 6.2, 40, 75, 139];
+    var labels = ["Intensity"];
     var colors = [
 
       "#C80000",
@@ -166,16 +167,17 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geo
       "#FFFFFF"
     ];
 
-    
+
     // Looping through intervals to generate a label with a colored square for each interval.
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML +=
-          '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-  }
+        '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
 
-  return div;
-};
+    return div;
+  };
 
-legend.addTo(map);
+  legend.addTo(map);
+
 });
