@@ -24,7 +24,8 @@ font-family: 'Open Sans', sans-serif;
 
 .legend {
   line-height: 18px;
-  color: #000000
+  color: #000000;
+  background-color: #ffffff;
   
 }
 .legend i {
