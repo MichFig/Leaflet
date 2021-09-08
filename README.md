@@ -66,6 +66,8 @@ In this step we are going to..
 
 * Add layer controls to our map.
 
+![image](https://user-images.githubusercontent.com/71892316/132543765-c34a3fb7-0eb2-404f-ad04-3bfd7929f85d.png)
+
 - - -
 
 ### Assessment
